@@ -1,0 +1,25 @@
+body {
+    padding-top: 56px;
+}
+
+.page-content {
+    padding-top: 1rem;
+}
+
+.answer-li {
+    list-style-type: none;
+}
+
+.width-100px {
+    width: 100px;
+}
+
+.red-bold {
+    font-weight: 600;
+    font-size: 2rem;
+    color: #ff0005;
+}
+
+.red {
+    color: #ff0005!important;
+}
