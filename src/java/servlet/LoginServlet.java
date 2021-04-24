@@ -1,12 +1,19 @@
 package servlet;
 
-import common.RequestMapping;
+import common.CommonAttribute;
 import common.RequestMapping.LoginRequest;
+import common.RequestMapping.SearchCarRequest;
+import dto.UserDTO;
 import java.io.IOException;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import service.UserService;
 
 /**
  *
@@ -55,8 +62,34 @@ public class LoginServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         processRequest(request, response);
+        
+        UserService userService = new UserService();
+        UserDTO user;
+        
+        try {
+            user = userService.checkUserCredential(request);
+        } catch (SQLException | ClassNotFoundException ex) {
+            Logger.getLogger(LoginServlet.class.getName()).log(Level.SEVERE, null, ex);
+            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            return;
+        }
+        
+        HttpSession session = request.getSession();
+        
+        // if user email and password is valid
+        if (user != null) {
+            session.setAttribute(CommonAttribute.USER, user);
+            session.setAttribute(CommonAttribute.LOGGED_IN, Boolean.TRUE);
+            
+            response.sendRedirect(SearchCarRequest.ACTION);
+            return;
+        }
+        
+        // if not, show error message
+        session.setAttribute(CommonAttribute.LOGGED_IN, Boolean.FALSE);
         request.getRequestDispatcher(LoginRequest.VIEW).forward(request, response);
     }
+
 
     /**
      * Returns a short description of the servlet.

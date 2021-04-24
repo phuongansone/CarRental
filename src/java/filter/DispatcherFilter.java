@@ -1,5 +1,9 @@
 package filter;
 
+import common.CommonAttribute;
+import common.RequestMapping;
+import common.RequestMapping.SearchCarRequest;
+import dto.UserDTO;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.io.PrintWriter;
@@ -10,6 +14,10 @@ import javax.servlet.FilterConfig;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import util.RequestUtil;
 
 /**
  *
@@ -101,7 +109,25 @@ public class DispatcherFilter implements Filter {
         
         Throwable problem = null;
         try {
-            chain.doFilter(request, response);
+            HttpServletResponse res = (HttpServletResponse) response;
+            HttpServletRequest req = (HttpServletRequest) request;
+            String resource = RequestUtil.getRequestedResource(request);
+            
+            if (resource.endsWith(".css") 
+                    || resource.endsWith(".js") 
+                    || resource.endsWith(".map")
+                    || resource.endsWith(".svg")) {
+                chain.doFilter(request, response);
+                return;
+            }
+            
+            if (resource.length() == 0) {
+                res.sendRedirect(SearchCarRequest.ACTION);
+                return;
+            }
+            
+            String url = RequestUtil.getProcessingServlet(resource);
+            req.getRequestDispatcher(url).forward(request, response);
         } catch (Throwable t) {
             // If an exception is thrown somewhere down the filter chain,
             // we still want to execute our after processing, and then

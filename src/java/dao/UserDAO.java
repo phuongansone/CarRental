@@ -1,6 +1,9 @@
 package dao;
 
+import common.RequestParam.UserParam;
+import dto.RoleDTO;
 import dto.UserDTO;
+import dto.UserStatusDTO;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -19,6 +22,15 @@ public class UserDAO {
     
     private static final String CHECK_EMAIL_EXISTED = "SELECT count(*) "
             + "FROM user WHERE email = ?";
+    
+    private static final String CHECK_USER_CREDENTIAL = "SELECT u.email, u.phone, "
+            + "u.name, u.address, "
+            + "r.id AS role_id, r.name AS role_name, "
+            + "s.id AS status_id, s.name AS status_name "
+            + "FROM user u "
+            + "INNER JOIN role r ON u.role_id = r.id "
+            + "INNER JOIN user_status s ON u.status_id = s.id "
+            + "WHERE u.email = ? AND password = ?";
     
     public int insertUser(UserDTO user) throws SQLException, ClassNotFoundException {
         Connection conn = null;
@@ -80,5 +92,53 @@ public class UserDAO {
         }
         
         return existed;
+    }
+    
+    public UserDTO checkUserCredential(String email, String password) 
+            throws SQLException, ClassNotFoundException {
+        Connection conn = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        
+        UserDTO user = null;
+        
+        try {
+            conn = DatabaseUtil.makeConnection();
+            if (conn != null) {
+                ps = conn.prepareStatement(CHECK_USER_CREDENTIAL);
+                ps.setString(1, email);
+                ps.setString(2, password);
+                
+                rs = ps.executeQuery();
+                if (rs.next()) {
+                    user = mapResultSetToUserDTO(rs);
+                }
+            }
+        } finally {
+            DatabaseUtil.closeConnection(conn, ps, rs);
+        }
+        
+        return user;
+    }
+    
+    private UserDTO mapResultSetToUserDTO(ResultSet rs) throws SQLException {
+        UserDTO user = new UserDTO();
+        
+        user.setEmail(rs.getString(UserParam.EMAIL));
+        user.setPhone(rs.getString(UserParam.PHONE));
+        user.setName(rs.getString(UserParam.NAME));
+        user.setAddress(rs.getString(UserParam.ADDRESS));
+        
+        RoleDTO role = new RoleDTO();
+        role.setId(rs.getInt(UserParam.ROLE_ID));
+        role.setName(rs.getString(UserParam.ROLE_NAME));
+        user.setRole(role);
+        
+        UserStatusDTO status = new UserStatusDTO();
+        status.setId(rs.getInt(UserParam.STATUS_ID));
+        status.setName(rs.getString(UserParam.STATUS_NAME));
+        user.setUserStatus(status);
+        
+        return user;
     }
 }

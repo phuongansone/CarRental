@@ -1,12 +1,17 @@
 package filter;
 
 import common.CommonAttribute;
-import common.RequestMapping;
+import common.RequestMapping.LoginRequest;
+import common.RequestMapping.RegisterRequest;
+import common.RequestMapping.RegisterSuccessRequest;
+import common.RequestMapping.SearchCarRequest;
 import dto.UserDTO;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.util.ArrayList;
+import java.util.List;
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
@@ -25,6 +30,8 @@ import util.RequestUtil;
 public class AuthenticationFilter implements Filter {
     
     private static final boolean debug = true;
+    
+    private static final List<String> FREE_ACCESS_URL = new ArrayList<>();
 
     // The filter configuration object we are associated with.  If
     // this value is null, this filter instance is not currently
@@ -32,6 +39,9 @@ public class AuthenticationFilter implements Filter {
     private FilterConfig filterConfig = null;
     
     public AuthenticationFilter() {
+        FREE_ACCESS_URL.add(RegisterRequest.SERVLET);
+        FREE_ACCESS_URL.add(RegisterSuccessRequest.SERVLET);
+        FREE_ACCESS_URL.add(SearchCarRequest.SERVLET);
     }    
     
     private void doBeforeProcessing(ServletRequest request, ServletResponse response)
@@ -101,12 +111,16 @@ public class AuthenticationFilter implements Filter {
                 chain.doFilter(request, response);
                 return;
             }
+            
+            if (resource.length() == 0) {
+                res.sendRedirect(SearchCarRequest.ACTION);
+                return;
+            }
 
-            if (url != null && (url.equals(RequestMapping.RegisterRequest.SERVLET) 
-                    || url.equals(RequestMapping.RegisterSuccessRequest.SERVLET))) {
+            if (url != null && (FREE_ACCESS_URL.contains(url))) {
                 req.getRequestDispatcher(url).forward(request, response);
             } else {
-                req.getRequestDispatcher(RequestMapping.LoginRequest.SERVLET)
+                req.getRequestDispatcher(LoginRequest.SERVLET)
                         .forward(request, response);
             }
         } catch (Throwable t) {

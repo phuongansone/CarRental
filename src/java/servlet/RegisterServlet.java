@@ -1,8 +1,8 @@
 package servlet;
 
 import common.CommonAttribute;
+import common.RequestMapping.LoginRequest;
 import common.RequestMapping.RegisterRequest;
-import common.RequestMapping.RegisterSuccessRequest;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.logging.Level;
@@ -79,7 +79,8 @@ public class RegisterServlet extends HttpServlet {
             return;
         }
         
-         response.sendRedirect(RegisterSuccessRequest.ACTION);
+        request.getSession().setAttribute(CommonAttribute.REGISTERED, Boolean.TRUE);
+        response.sendRedirect(LoginRequest.ACTION);
     }
 
     /**

@@ -1,8 +1,8 @@
 package filter;
 
 import common.CommonAttribute;
-import common.RequestMapping;
 import common.RequestMapping.LogoutRequest;
+import common.RequestMapping.SearchCarRequest;
 import dto.UserDTO;
 import java.io.IOException;
 import java.io.PrintStream;
@@ -39,10 +39,12 @@ public class AuthorizationFilter implements Filter {
     private FilterConfig filterConfig = null;
     
     public AuthorizationFilter() {
-        ADMIN_PERMISSION.add(RequestMapping.LogoutRequest.ACTION);
+        ADMIN_PERMISSION.add(LogoutRequest.ACTION);
+        ADMIN_PERMISSION.add(SearchCarRequest.ACTION);
         ADMIN_PERMISSION.add("");
         
         USER_PERMISSION.add(LogoutRequest.ACTION);
+        USER_PERMISSION.add(SearchCarRequest.ACTION);
         USER_PERMISSION.add("");
     }    
     

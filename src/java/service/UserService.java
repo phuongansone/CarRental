@@ -48,4 +48,11 @@ public class UserService {
             throws SQLException, ClassNotFoundException {
         return userDAO.checkEmailExisted(request.getParameter(UserParam.EMAIL));
     }
+    
+    public UserDTO checkUserCredential(HttpServletRequest request) 
+            throws SQLException, ClassNotFoundException {
+        String email = request.getParameter(UserParam.EMAIL);
+        String password = request.getParameter(UserParam.PASSWORD);
+        return userDAO.checkUserCredential(email, password);
+    }
 }

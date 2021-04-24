@@ -35,4 +35,12 @@ public class RequestMapping {
         private LogoutRequest() {
         }
     }
+    
+    public static class SearchCarRequest {
+        public static final String ACTION = "searchCar";
+        public static final String SERVLET = "SearchCarServlet";
+        public static final String VIEW = "/WEB-INF/pages/search-car.jsp";
+        private SearchCarRequest() {
+        }
+    }
 }
