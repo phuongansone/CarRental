@@ -9,6 +9,7 @@ import java.sql.Date;
  */
 public class DiscountDTO implements Serializable {
     private int id;
+    private String code;
     private double discount;
     private Date effectiveDate;
     private Date expirationDate;
@@ -17,9 +18,10 @@ public class DiscountDTO implements Serializable {
     public DiscountDTO() {
     }
 
-    public DiscountDTO(int id, double discount, Date effectiveDate, 
+    public DiscountDTO(int id, String code, double discount, Date effectiveDate, 
             Date expirationDate, int quantity) {
         this.id = id;
+        this.code = code;
         this.discount = discount;
         this.effectiveDate = effectiveDate;
         this.expirationDate = expirationDate;
@@ -65,6 +67,13 @@ public class DiscountDTO implements Serializable {
     public void setQuantity(int quantity) {
         this.quantity = quantity;
     }
-    
+
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
+    }
     
 }

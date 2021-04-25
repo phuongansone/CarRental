@@ -80,4 +80,26 @@ public class RequestMapping {
         private SaveOrderRequest() {
         }
     }
+    
+    public static class AddDiscountRequest {
+        public static final String ACTION = "addDiscount";
+        public static final String SERVLET = "AddDiscountServlet";
+        private AddDiscountRequest() {
+        }
+    }
+    
+    public static class OrderHistoryRequest {
+        public static final String ACTION = "orderHistory";
+        public static final String SERVLET = "OrderHistoryServlet";
+        public static final String VIEW = "/WEB-INF/pages/history.jsp";
+        private OrderHistoryRequest() {
+        }
+    }
+    
+    public static class OrderRequest {
+        public static final String ACTION = "order";
+        public static final String VIEW = "/WEB-INF/pages/order.jsp";
+        private OrderRequest() {
+        }
+    }
 }

@@ -31,6 +31,13 @@
         </c:if>
         <c:remove var="ADD_TO_CART" scope="session" />
         
+        <c:if test="${sessionScope.SAVE_ORDER == true}">
+            <div class="alert alert-success" role="alert">
+                Order successfully!
+            </div>
+        </c:if>
+        <c:remove var="SAVE_ORDER" scope="session" />
+        
         <%@include file="../jspf/navigation.jspf" %>
         
         <div class="container page-content">

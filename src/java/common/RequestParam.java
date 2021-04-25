@@ -13,6 +13,7 @@ public class RequestParam {
     // search
     public static final String KEYWORD = "keyword";
     public static final String CATEGORY_ID = "category_id";
+    public static final String DATE = "date";
     
     // add to cart
     public static final String CAR_ID = "car_id";
@@ -52,5 +53,28 @@ public class RequestParam {
         public static final String ID = "id";
         public static final String NAME = "name";
         public static final String DESCRIPTION = "description";
+    }
+    
+    public static class DiscountParam {
+        public static final String ID = "id";
+        public static final String CODE = "code";
+        public static final String DISCOUNT = "discount";
+        public static final String EFFECTIVE_DATE = "effective_date";
+        public static final String EXPIRATION_DATE = "expiration_date";
+        public static final String QUANTITY = "quantity";
+    }
+    
+    public static class OrderParam {
+        public static final String ID = "id";
+        public static final String EMAIL = "email";
+        public static final String FULLNAME = "fullname";
+        public static final String ADDRESS = "address";
+        public static final String PHONE = "phone";
+        public static final String RENTAL_DATE = "rental_date";
+        public static final String RETURN_DATE = "return_date";
+        public static final String DISCOUNT_ID = "discount_id";
+        public static final String DISCOUNT = "discount";
+        public static final String PRICE = "price";
+        public static final String CREATE_DATE = "create_date";
     }
 }

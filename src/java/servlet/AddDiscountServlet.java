@@ -1,8 +1,9 @@
 package servlet;
 
 import common.CommonAttribute;
-import static common.CommonAttribute.ERROR;
-import common.RequestMapping.ViewCartRequest;
+import common.RequestMapping.SaveOrderRequest;
+import common.RequestParam.DiscountParam;
+import dto.DiscountDTO;
 import dto.OrderDetailDTO;
 import java.io.IOException;
 import java.sql.SQLException;
@@ -14,13 +15,14 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import service.DiscountService;
 import service.OrderDetailService;
 
 /**
  *
  * @author PC
  */
-public class ViewCartServlet extends HttpServlet {
+public class AddDiscountServlet extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -48,26 +50,6 @@ public class ViewCartServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         processRequest(request, response);
-        
-        HttpSession session = request.getSession();
-        List<OrderDetailDTO> cart = (List<OrderDetailDTO>) session.getAttribute(CommonAttribute.CART);
-        long totalPrice = 0;
-        
-        OrderDetailService orderDetailService = new OrderDetailService();
-        
-        try {
-            orderDetailService.updateOutOfStockStatus(cart);
-            totalPrice = OrderDetailService.calculateTotalPrice(cart);
-        } catch (SQLException | ClassNotFoundException ex) {
-            Logger.getLogger(ViewCartServlet.class.getName())
-                    .log(Level.SEVERE, null, ex);
-            session.setAttribute(ERROR, Boolean.TRUE);
-        }
-        
-        session.setAttribute(CommonAttribute.CART, cart);
-        session.setAttribute(CommonAttribute.TOTAL_PRICE, totalPrice);
-        
-        request.getRequestDispatcher(ViewCartRequest.VIEW).forward(request, response);
     }
 
     /**
@@ -82,6 +64,48 @@ public class ViewCartServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         processRequest(request, response);
+        
+        HttpSession session = request.getSession();
+        
+        DiscountService discountService = new DiscountService();
+        String code = request.getParameter(DiscountParam.CODE);
+        DiscountDTO discount = null;
+        
+        List<OrderDetailDTO> cart = (List<OrderDetailDTO>) session.getAttribute(CommonAttribute.CART);
+        long price = OrderDetailService.calculateTotalPrice(cart);
+        
+        
+        try {
+            discount = discountService.getDiscountByCode(code);
+        } catch (SQLException | ClassNotFoundException ex) {
+            Logger.getLogger(AddDiscountServlet.class.getName())
+                    .log(Level.SEVERE, null, ex);
+            session.setAttribute(CommonAttribute.ERROR, Boolean.TRUE);
+        }
+        
+        if (discount == null) {
+            session.setAttribute(CommonAttribute.VALID, Boolean.FALSE);
+        } else {
+            if (!discountService.checkDiscountIsEffective(discount)) {
+                // check if discount is effective
+                session.setAttribute(CommonAttribute.EFFECTIVE, Boolean.FALSE);
+            } else if (!discountService.checkDiscountIsNotExpired(discount)) {
+                // check if discount is not expired
+                session.setAttribute(CommonAttribute.NOT_EXPIRED, Boolean.FALSE);
+            } else if (!discountService.checkDiscountAvalaibility(discount)) {
+                // check if discount is not out of stock
+                session.setAttribute(CommonAttribute.AVALAIBLE, Boolean.FALSE);
+            } else {
+                // re-calculate price
+                price = Math.round(price * (1 - discount.getDiscount()));
+                
+                // set discount to session
+                session.setAttribute(CommonAttribute.DISCOUNT, discount);
+            }
+        }
+        
+        session.setAttribute(CommonAttribute.TOTAL_PRICE, price);
+        response.sendRedirect(SaveOrderRequest.ACTION);
     }
 
     /**
@@ -93,5 +117,4 @@ public class ViewCartServlet extends HttpServlet {
     public String getServletInfo() {
         return "Short description";
     }
-
 }

@@ -12,4 +12,12 @@ public class StringUtil {
             return defaultValue;
         }
     }
+    
+    public static double parseDouble(String number, double defaultValue) {
+        try {
+            return Double.parseDouble(number);
+        } catch (NumberFormatException e) {
+            return defaultValue;
+        }
+    }
 }

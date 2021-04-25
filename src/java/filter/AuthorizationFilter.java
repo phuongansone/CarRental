@@ -1,8 +1,11 @@
 package filter;
 
 import common.CommonAttribute;
+import common.RequestMapping.AddDiscountRequest;
 import common.RequestMapping.AddToCartRequest;
 import common.RequestMapping.LogoutRequest;
+import common.RequestMapping.OrderHistoryRequest;
+import common.RequestMapping.OrderRequest;
 import common.RequestMapping.RemoveFromCartRequest;
 import common.RequestMapping.SaveOrderRequest;
 import common.RequestMapping.SearchCarRequest;
@@ -55,6 +58,9 @@ public class AuthorizationFilter implements Filter {
         USER_PERMISSION.add(UpdateCartRequest.ACTION);
         USER_PERMISSION.add(RemoveFromCartRequest.ACTION);
         USER_PERMISSION.add(SaveOrderRequest.ACTION);
+        USER_PERMISSION.add(AddDiscountRequest.ACTION);
+        USER_PERMISSION.add(OrderHistoryRequest.ACTION);
+        USER_PERMISSION.add(OrderRequest.ACTION);
         USER_PERMISSION.add("");
     }    
     

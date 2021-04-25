@@ -53,7 +53,11 @@ public class CarDAO {
     
     private static final String COUNT_CARS_BY_NAME = "SELECT count(*) FROM car WHERE name LIKE ?";
     
-    private static final String COUNT_CARS_BY_CATEGORY = "SELECT count(*) FROM car WHERE category_id = ?";
+    private static final String COUNT_CARS_BY_CATEGORY = "SELECT count(*) FROM car "
+            + "WHERE category_id = ?";
+    
+    private static final String UPDATE_CAR_QUANTITY = "UPDATE car SET quantity = ? "
+            + "WHERE id = ?";
     
     public List<CarDTO> getAllCars(int offset, int length) 
             throws SQLException, ClassNotFoundException {
@@ -246,6 +250,32 @@ public class CarDAO {
         }
         
         return car;
+    }
+    
+    public boolean updateCarQuantity(int id, int quantity) 
+            throws SQLException, ClassNotFoundException {
+        Connection conn = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        
+        boolean updated = false;
+        
+        try {
+            conn = DatabaseUtil.makeConnection();
+            
+            if (conn != null) {
+                ps = conn.prepareStatement(UPDATE_CAR_QUANTITY);
+                ps.setInt(1, quantity);
+                ps.setInt(2, id);
+                
+                updated = ps.executeUpdate() > 0;
+            }
+            
+        } finally {
+            DatabaseUtil.closeConnection(conn, ps, rs);
+        }
+        
+        return updated;
     }
     
     private CarDTO mapResultSetToCarDTO(ResultSet rs) throws SQLException {

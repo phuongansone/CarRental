@@ -1,17 +1,21 @@
 package servlet;
 
 import common.CommonAttribute;
-import common.RequestMapping;
 import common.RequestMapping.SaveOrderRequest;
+import common.RequestMapping.SearchCarRequest;
 import common.RequestMapping.ViewCartRequest;
 import dto.OrderDetailDTO;
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import service.OrderService;
 
 /**
  *
@@ -49,7 +53,7 @@ public class SaveOrderServlet extends HttpServlet {
         HttpSession session = request.getSession();
         List<OrderDetailDTO> cart = (List<OrderDetailDTO>) session.getAttribute(CommonAttribute.CART);
         
-        if (checkCartHasOutOfStockItem(cart)) {
+        if (cart == null || checkCartHasOutOfStockItem(cart)) {
             response.sendRedirect(ViewCartRequest.ACTION);
             return;
         }
@@ -70,8 +74,23 @@ public class SaveOrderServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         processRequest(request, response);
-        request.getRequestDispatcher(SaveOrderRequest.VIEW_GET)
-                .forward(request, response);
+        
+        HttpSession session = request.getSession();
+        
+        OrderService orderService = new OrderService();
+        
+        try {
+            orderService.saveOrder(request);
+        } catch (ClassNotFoundException | SQLException ex) {
+            Logger.getLogger(SaveOrderServlet.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        session.removeAttribute(CommonAttribute.CART);
+        session.removeAttribute(CommonAttribute.TOTAL_PRICE);
+        session.removeAttribute(CommonAttribute.DISCOUNT);
+        session.setAttribute(CommonAttribute.SAVE_ORDER, Boolean.TRUE);
+        
+        response.sendRedirect(SearchCarRequest.ACTION);
     }
 
     /**

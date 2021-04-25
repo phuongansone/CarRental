@@ -2,6 +2,7 @@ package dto;
 
 import java.io.Serializable;
 import java.sql.Date;
+import java.util.List;
 
 /**
  *
@@ -12,13 +13,19 @@ public class OrderDTO implements Serializable {
     private String email;
     private String fullname;
     private String address;
+    private String phone;
     private Date rentalDate;
     private Date returnDate;
     private int price;
     private Date createDate;
     private DiscountDTO discount;
-
+    private List<OrderDetailDTO> orderDetails;
+            
     public OrderDTO() {
+    }
+
+    public OrderDTO(int id) {
+        this.id = id;
     }
 
     public OrderDTO(int id, String email, String fullname, String address, 
@@ -106,6 +113,21 @@ public class OrderDTO implements Serializable {
     public void setDiscount(DiscountDTO discount) {
         this.discount = discount;
     }
-    
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public List<OrderDetailDTO> getOrderDetails() {
+        return orderDetails;
+    }
+
+    public void setOrderDetails(List<OrderDetailDTO> orderDetails) {
+        this.orderDetails = orderDetails;
+    }
     
 }

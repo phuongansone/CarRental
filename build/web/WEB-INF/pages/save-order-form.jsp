@@ -35,6 +35,51 @@
                             </li>                            
                         </c:forEach>
 
+                        <li class="list-group-item">
+                            <form action="addDiscount" method="POST">
+                                <div class="row mb-1">
+                                    <div class="col-12">
+                                        Discount
+                                    </div>
+                                </div>
+                                <div class="row mb-1">
+                                    <div class="col-9">
+                                        <input class="form-control" type="text" 
+                                               name="code" value="${sessionScope.DISCOUNT.code}" />
+                                    </div>
+                                    <div class="col-3">
+                                        <input type="submit" value="Add" class="btn btn-primary" />
+                                    </div>
+                                </div>
+                                <c:if test="${sessionScope.VALID == false}">
+                                    <div class="alert alert-danger" role="alert">
+                                        Discount is not valid.
+                                    </div>
+                                </c:if>
+                                <c:remove var="VALID" scope="session" />
+                                
+                                <c:if test="${sessionScope.AVALAIBLE == false}">
+                                    <div class="alert alert-danger" role="alert">
+                                        Discount is not available.
+                                    </div>
+                                </c:if>
+                                <c:remove var="AVALAIBLE" scope="session" />
+                                
+                                <c:if test="${sessionScope.EFFECTIVE == false}">
+                                    <div class="alert alert-danger" role="alert">
+                                        Discount is not effective yet.
+                                    </div>
+                                </c:if>
+                                <c:remove var="EFFECTIVE" scope="session" />
+                                
+                                <c:if test="${sessionScope.NOT_EXPIRED == false}">
+                                    <div class="alert alert-danger" role="alert">
+                                        Discount is already expired.
+                                    </div>
+                                </c:if>
+                                <c:remove var="NOT_EXPIRED" scope="session" />
+                            </form>
+                        </li>
                         <li class="list-group-item d-flex justify-content-between">
                             <span>Total (VNĐ)</span>
                             <strong><fmt:formatNumber value="${sessionScope.TOTAL_PRICE}" type="number" /></strong>
@@ -51,14 +96,6 @@
                                 <input type="text" class="form-control" name="fullname" id="fullname" required>
                                 <div class="invalid-feedback">
                                     Please input full name
-                                </div>
-                            </div>
-
-                            <div class="col-12 mt-3">
-                                <label for="email" class="form-label">Email</label>
-                                <input type="email" class="form-control" id="email" name="email" required>
-                                <div class="invalid-feedback">
-                                    Please input valid email address
                                 </div>
                             </div>
 

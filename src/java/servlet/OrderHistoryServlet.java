@@ -2,10 +2,13 @@ package servlet;
 
 import common.CommonAttribute;
 import static common.CommonAttribute.ERROR;
-import common.RequestMapping.ViewCartRequest;
-import dto.OrderDetailDTO;
+import common.RequestMapping.OrderHistoryRequest;
+import common.RequestParam;
+import dto.OrderDTO;
+import dto.UserDTO;
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -14,13 +17,13 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import service.OrderDetailService;
+import service.OrderService;
 
 /**
  *
  * @author PC
  */
-public class ViewCartServlet extends HttpServlet {
+public class OrderHistoryServlet extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -50,24 +53,31 @@ public class ViewCartServlet extends HttpServlet {
         processRequest(request, response);
         
         HttpSession session = request.getSession();
-        List<OrderDetailDTO> cart = (List<OrderDetailDTO>) session.getAttribute(CommonAttribute.CART);
-        long totalPrice = 0;
+        UserDTO user = (UserDTO) session.getAttribute(CommonAttribute.USER);
         
-        OrderDetailService orderDetailService = new OrderDetailService();
+        OrderService orderService = new OrderService();
+        
+        List<OrderDTO> orders = new ArrayList<>();
+        
+        String keyword = request.getParameter(RequestParam.KEYWORD);
+        String date = request.getParameter(RequestParam.DATE);
         
         try {
-            orderDetailService.updateOutOfStockStatus(cart);
-            totalPrice = OrderDetailService.calculateTotalPrice(cart);
+            if (keyword != null && !keyword.isBlank()) {
+                orders = orderService.getOrdersByEmailAndName(user.getEmail(), keyword);
+            } else if (date != null && !date.isBlank()) {
+                orders = orderService.getOrdersByDate(user.getEmail(), date);
+            } else {
+                orders = orderService.getOrdersByEmail(user.getEmail());
+            }
         } catch (SQLException | ClassNotFoundException ex) {
-            Logger.getLogger(ViewCartServlet.class.getName())
+            Logger.getLogger(OrderHistoryServlet.class.getName())
                     .log(Level.SEVERE, null, ex);
             session.setAttribute(ERROR, Boolean.TRUE);
         }
         
-        session.setAttribute(CommonAttribute.CART, cart);
-        session.setAttribute(CommonAttribute.TOTAL_PRICE, totalPrice);
-        
-        request.getRequestDispatcher(ViewCartRequest.VIEW).forward(request, response);
+        request.setAttribute(CommonAttribute.ORDERS, orders);
+        request.getRequestDispatcher(OrderHistoryRequest.VIEW).forward(request, response);
     }
 
     /**

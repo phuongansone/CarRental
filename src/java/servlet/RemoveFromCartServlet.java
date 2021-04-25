@@ -71,6 +71,10 @@ public class RemoveFromCartServlet extends HttpServlet {
             cart.remove(index);
         }
         
+        if (cart.isEmpty()) {
+            cart = null;
+        }
+        
         session.setAttribute(CommonAttribute.CART, cart);
         response.sendRedirect(ViewCartRequest.ACTION);
     }

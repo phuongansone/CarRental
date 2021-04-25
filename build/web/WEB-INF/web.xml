@@ -50,7 +50,7 @@
     </servlet>
     <servlet>
         <servlet-name>UpdateCartServlet</servlet-name>
-        <servlet-class>service.UpdateCartServlet</servlet-class>
+        <servlet-class>servlet.UpdateCartServlet</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>RemoveFromCartServlet</servlet-name>
@@ -59,6 +59,18 @@
     <servlet>
         <servlet-name>SaveOrderServlet</servlet-name>
         <servlet-class>servlet.SaveOrderServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>AddDiscountServlet</servlet-name>
+        <servlet-class>servlet.AddDiscountServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>OrderHistoryServlet</servlet-name>
+        <servlet-class>servlet.OrderHistoryServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>OrderServlet</servlet-name>
+        <servlet-class>servlet.OrderServlet</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>LoginServlet</servlet-name>
@@ -95,6 +107,18 @@
     <servlet-mapping>
         <servlet-name>SaveOrderServlet</servlet-name>
         <url-pattern>/SaveOrderServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>AddDiscountServlet</servlet-name>
+        <url-pattern>/AddDiscountServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>OrderHistoryServlet</servlet-name>
+        <url-pattern>/OrderHistoryServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>OrderServlet</servlet-name>
+        <url-pattern>/OrderServlet</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>
