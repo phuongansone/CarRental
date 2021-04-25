@@ -42,6 +42,13 @@ public class CarDAO {
             + "ORDER BY create_date "
             + "DESC LIMIT ?, ?";
     
+    private static final String GET_CAR_BY_ID = "SELECT car.id, car.name, image, "
+            + "color, year, price, quantity, branch, "
+            + "cat.id AS category_id, cat.name AS category_name, rating "
+            + "FROM car "
+            + "INNER JOIN category cat ON car.category_id = cat.id "
+            + "WHERE car.id = ?";
+    
     private static final String COUNT_ALL_CARS = "SELECT count(*) FROM car";
     
     private static final String COUNT_CARS_BY_NAME = "SELECT count(*) FROM car WHERE name LIKE ?";
@@ -212,6 +219,33 @@ public class CarDAO {
         }
         
         return total;
+    }
+    
+    public CarDTO getCarById(int carId) 
+            throws SQLException, ClassNotFoundException {
+        Connection conn = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        
+        CarDTO car = null;
+        
+        try {
+            conn = DatabaseUtil.makeConnection();
+            
+            if (conn != null) {
+                ps = conn.prepareStatement(GET_CAR_BY_ID);
+                ps.setInt(1, carId);
+                
+                rs = ps.executeQuery();
+                if (rs.next()) {
+                    car = mapResultSetToCarDTO(rs);
+                }
+            }
+        } finally {
+            DatabaseUtil.closeConnection(conn, ps, rs);
+        }
+        
+        return car;
     }
     
     private CarDTO mapResultSetToCarDTO(ResultSet rs) throws SQLException {

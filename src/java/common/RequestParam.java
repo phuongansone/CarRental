@@ -14,6 +14,10 @@ public class RequestParam {
     public static final String KEYWORD = "keyword";
     public static final String CATEGORY_ID = "category_id";
     
+    // add to cart
+    public static final String CAR_ID = "car_id";
+    public static final String QUANTITY = "quantity";
+    
     public static class UserParam {
         public static final String EMAIL = "email";
         public static final String PHONE = "phone";

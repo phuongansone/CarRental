@@ -43,4 +43,41 @@ public class RequestMapping {
         private SearchCarRequest() {
         }
     }
+    
+    public static class AddToCartRequest {
+        public static final String ACTION = "addToCart";
+        public static final String SERVLET = "AddToCartServlet";
+        private AddToCartRequest() {
+        }
+    }
+    
+    public static class ViewCartRequest {
+        public static final String ACTION = "viewCart";
+        public static final String SERVLET = "ViewCartServlet";
+        public static final String VIEW = "/WEB-INF/pages/view-cart.jsp";
+        private ViewCartRequest() {
+        }
+    }
+    
+    public static class UpdateCartRequest {
+        public static final String ACTION = "updateCart";
+        public static final String SERVLET = "UpdateCartServlet";
+        private UpdateCartRequest() {
+        }
+    }
+    
+    public static class RemoveFromCartRequest {
+        public static final String ACTION = "removeFromCart";
+        public static final String SERVLET = "RemoveFromCartServlet";
+        private RemoveFromCartRequest() {
+        }
+    }
+    
+    public static class SaveOrderRequest {
+        public static final String ACTION = "saveOrder";
+        public static final String SERVLET = "SaveOrderServlet";
+        public static final String VIEW_GET = "/WEB-INF/pages/save-order-form.jsp";
+        private SaveOrderRequest() {
+        }
+    }
 }

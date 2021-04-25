@@ -1,8 +1,13 @@
 package filter;
 
 import common.CommonAttribute;
+import common.RequestMapping.AddToCartRequest;
 import common.RequestMapping.LogoutRequest;
+import common.RequestMapping.RemoveFromCartRequest;
+import common.RequestMapping.SaveOrderRequest;
 import common.RequestMapping.SearchCarRequest;
+import common.RequestMapping.UpdateCartRequest;
+import common.RequestMapping.ViewCartRequest;
 import dto.UserDTO;
 import java.io.IOException;
 import java.io.PrintStream;
@@ -45,6 +50,11 @@ public class AuthorizationFilter implements Filter {
         
         USER_PERMISSION.add(LogoutRequest.ACTION);
         USER_PERMISSION.add(SearchCarRequest.ACTION);
+        USER_PERMISSION.add(AddToCartRequest.ACTION);
+        USER_PERMISSION.add(ViewCartRequest.ACTION);
+        USER_PERMISSION.add(UpdateCartRequest.ACTION);
+        USER_PERMISSION.add(RemoveFromCartRequest.ACTION);
+        USER_PERMISSION.add(SaveOrderRequest.ACTION);
         USER_PERMISSION.add("");
     }    
     

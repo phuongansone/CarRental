@@ -19,6 +19,18 @@
         </c:if>
         <c:remove var="LOGGED_IN" scope="session" />
         
+        <c:if test="${sessionScope.ADD_TO_CART == true}">
+            <div class="alert alert-success" role="alert">
+                Car is added to cart.
+            </div>
+        </c:if>
+        <c:if test="${sessionScope.ADD_TO_CART == false}">
+            <div class="alert alert-danger" role="alert">
+                Something is wrong. Please try again.
+            </div>
+        </c:if>
+        <c:remove var="ADD_TO_CART" scope="session" />
+        
         <%@include file="../jspf/navigation.jspf" %>
         
         <div class="container page-content">
@@ -90,10 +102,10 @@
                                     </h5>
                                 </div>
                                 <c:if test="${user.role.id != Role.ADMIN.roleId}">
-                                    <form action="#" method="POST">
+                                    <form action="addToCart" method="POST">
                                         <div class="d-flex flex-column mt-4">
                                             <div class="mb-1">
-                                                <input type="hidden" name="id" 
+                                                <input type="hidden" name="car_id" 
                                                        value="${car.id}" />
                                                 <input type="number" name="quantity" 
                                                        value="1" step="1"
