@@ -22,6 +22,7 @@ public class CommonAttribute {
     public static final String REGISTERED = "REGISTERED";
     public static final String EMAIL_EXISTED = "EMAIL_EXISTED";
     public static final String LOGGED_IN = "LOGGED_IN";
+    public static final String CAPTCHA_VALID = "CAPTCHA_VALID";
     public static final String LOGGED_OUT = "LOGGED_OUT";
     public static final String INSERTED = "INSERTED";
     public static final String UPDATED = "UPDATED";

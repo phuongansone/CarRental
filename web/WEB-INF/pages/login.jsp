@@ -27,6 +27,14 @@
                             Goodbye. See you again
                         </div>
                     </c:if>
+                    
+                    <c:if test="${sessionScope.CAPTCHA_VALID == false}">
+                        <div class="alert alert-warning" role="alert">
+                            Captcha is invalid.
+                        </div>
+                    </c:if>
+                    
+                    <c:remove var="CAPTCHA_VALID" scope="session" />
                     <c:remove var="REGISTERED" scope="session" />
                     <c:remove var="LOGGED_IN" scope="session" />
                     <c:remove var="LOGGED_OUT" scope="session" />
@@ -50,6 +58,10 @@
                                            id="password" name="password" 
                                            placeholder="Enter password" required>
                                 </div>
+                                <div class="g-recaptcha" 
+                                     data-sitekey="6LcAxbkaAAAAAAKfYGNgDiNmBF5winyeQctGT2MA">
+
+                                </div>
                                 <div class="form-group">
                                     <button type="submit" 
                                             class="btn btn-secondary btn-block">
@@ -68,4 +80,5 @@
     </body>
     <script src="resources/js/jquery-3.6.0.min.js"></script>
     <script src="resources/js/bootstrap.min.js" /></script>
+    <script src='https://www.google.com/recaptcha/api.js?hl=en'></script>
 </html>

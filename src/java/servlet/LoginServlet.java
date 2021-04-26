@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import recaptcha.VerifyUtil;
 import service.UserService;
 
 /**
@@ -65,6 +66,13 @@ public class LoginServlet extends HttpServlet {
         
         UserService userService = new UserService();
         UserDTO user;
+        
+        String gRecaptchaResponse = request.getParameter("g-recaptcha-response");
+        if (!VerifyUtil.verify(gRecaptchaResponse)) {
+            request.getSession().setAttribute(CommonAttribute.CAPTCHA_VALID, Boolean.FALSE);
+            request.getRequestDispatcher(LoginRequest.VIEW).forward(request, response);
+            return;
+        }
         
         try {
             user = userService.checkUserCredential(request);
