@@ -1,6 +1,7 @@
 package service;
 
 import dao.CarDAO;
+import dao.OrderDetailDAO;
 import dto.CarDTO;
 import dto.OrderDetailDTO;
 import java.sql.SQLException;
@@ -13,9 +14,11 @@ import java.util.List;
 public class OrderDetailService {
 
     private final CarDAO carDAO;
+    private final OrderDetailDAO orderDetailDAO;
 
     public OrderDetailService() {
         carDAO = new CarDAO();
+        orderDetailDAO = new OrderDetailDAO();
     }
 
     public void updateOutOfStockStatus(List<OrderDetailDTO> cart)
@@ -32,6 +35,11 @@ public class OrderDetailService {
             
             orderDetail.setOutOfStock(car.getQuantity() < orderDetail.getQuantity());
         }
+    }
+    
+    public boolean updateRating(int id, double rating) 
+            throws SQLException, ClassNotFoundException {
+        return orderDetailDAO.updateRating(id, rating);
     }
     
     public static int calculateTotalPrice(List<OrderDetailDTO> cart) {

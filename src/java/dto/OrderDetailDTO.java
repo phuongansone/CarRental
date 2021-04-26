@@ -11,6 +11,7 @@ public class OrderDetailDTO implements Serializable {
     private OrderDTO order;
     private CarDTO car;
     private int quantity;
+    private int rating;
     private boolean outOfStock;
     private int price;
 
@@ -78,6 +79,12 @@ public class OrderDetailDTO implements Serializable {
     public void setPrice(int price) {
         this.price = price;
     }
-    
-    
+
+    public int getRating() {
+        return rating;
+    }
+
+    public void setRating(int rating) {
+        this.rating = rating;
+    }
 }

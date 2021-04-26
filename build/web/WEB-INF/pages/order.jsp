@@ -56,6 +56,19 @@
                             Price <b><fmt:formatNumber type="number" value="${item.quantity * item.car.price}" /> VNĐ</b>
                         </div>
                     </div>
+                    <c:if test="${order.status == true}">
+                        <div class="col-md-12 mt-1">
+                            <form action="updateRating" method="POST">
+                                <input type="hidden" name="id" value="${order.id}" />
+                                <input type="hidden" name="detail_id" value="${item.id}" />
+                                <label for="rating">Rating: </label>
+                                <input type="number" min="0" max="10" step="1" 
+                                       name="rating" id="rating" required
+                                       value="${item.rating}"/>
+                                <input type="submit" class="btn btn-outline-primary" value="Feedback" />
+                            </form>
+                        </div>                        
+                    </c:if>
                 </div>
             </c:forEach>
             <c:if test="${order.status == true}">

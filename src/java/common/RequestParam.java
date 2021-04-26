@@ -66,6 +66,8 @@ public class RequestParam {
     
     public static class OrderParam {
         public static final String ID = "id";
+        public static final String DETAIL_ID = "detail_id";
+        public static final String RATING = "rating";
         public static final String EMAIL = "email";
         public static final String FULLNAME = "fullname";
         public static final String ADDRESS = "address";
@@ -77,5 +79,10 @@ public class RequestParam {
         public static final String STATUS = "status";
         public static final String PRICE = "price";
         public static final String CREATE_DATE = "create_date";
+    }
+    
+    public static class OrderDetailParam {
+        public static final String ID = "id";
+        public static final String RATING = "rating";
     }
 }

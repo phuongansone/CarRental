@@ -1,7 +1,7 @@
 package dao;
 
-import common.RequestParam;
 import common.RequestParam.CarParam;
+import common.RequestParam.OrderDetailParam;
 import static common.RequestParam.QUANTITY;
 import dto.CarDTO;
 import dto.OrderDetailDTO;
@@ -23,11 +23,15 @@ public class OrderDetailDAO {
             + "(order_id, car_id, quantity) "
             + "VALUES (?, ?, ?)";
     
-    private static final String GET_ORDER_DETAILS = "SELECT c.name, c.image, c.color, "
-            + "c.year, c.price, c.branch, od.quantity "
+    private static final String GET_ORDER_DETAILS = "SELECT od.id, c.name, c.image, c.color, "
+            + "c.year, c.price, c.branch, od.quantity, od.rating "
             + "FROM order_detail od "
             + "INNER JOIN car c ON od.car_id = c.id "
             + "WHERE order_id = ?";
+    
+    private static final String UPDATE_RATING = "UPDATE order_detail "
+            + "SET rating = ? "
+            + "WHERE id = ?";
     
     public int insertOrderDetail(OrderDetailDTO orderDetail, int orderId) 
             throws SQLException, ClassNotFoundException {
@@ -88,8 +92,34 @@ public class OrderDetailDAO {
         return orderDetails;
     }
     
+    public boolean updateRating(int id, double rating) 
+            throws SQLException, ClassNotFoundException {
+        Connection conn = null;
+        PreparedStatement ps = null;
+        
+        boolean updated = false;
+        
+        try {
+            conn = DatabaseUtil.makeConnection();
+            
+            if (conn != null) {
+                ps = conn.prepareStatement(UPDATE_RATING);
+                ps.setDouble(1, rating);
+                ps.setInt(2, id);
+                
+                updated = ps.executeUpdate() > 0;
+            }
+        } finally {
+            DatabaseUtil.closeConnection(conn, ps, null);
+        }
+        
+        return updated;
+    }
+    
     private OrderDetailDTO mapResultSetToOrderDetail(ResultSet rs) throws SQLException {
         OrderDetailDTO orderDetail = new OrderDetailDTO();
+        orderDetail.setId(rs.getInt(OrderDetailParam.ID));
+        orderDetail.setRating(rs.getInt(OrderDetailParam.RATING));
         
         CarDTO car = new CarDTO();
         car.setName(rs.getString(CarParam.NAME));

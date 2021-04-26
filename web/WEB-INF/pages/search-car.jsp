@@ -96,6 +96,9 @@
                                 <div class="mt-1 mb-1 spec-1">
                                     <b>Year</b>: ${car.year}
                                 </div>
+                                <div class="mt-1 mb-1 spec-1">
+                                    <b>Rating</b>: ${car.rating}
+                                </div>
                                 <div class="mt-1 mb-1 spec-1 text-muted">
                                     Color: ${car.color}<br>
                                     In stock: ${car.quantity} cars

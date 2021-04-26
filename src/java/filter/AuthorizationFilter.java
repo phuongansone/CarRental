@@ -11,6 +11,7 @@ import common.RequestMapping.RemoveFromCartRequest;
 import common.RequestMapping.SaveOrderRequest;
 import common.RequestMapping.SearchCarRequest;
 import common.RequestMapping.UpdateCartRequest;
+import common.RequestMapping.UpdateRatingRequest;
 import common.RequestMapping.ViewCartRequest;
 import dto.UserDTO;
 import java.io.IOException;
@@ -63,6 +64,7 @@ public class AuthorizationFilter implements Filter {
         USER_PERMISSION.add(OrderHistoryRequest.ACTION);
         USER_PERMISSION.add(OrderRequest.ACTION);
         USER_PERMISSION.add(CancelOrderRequest.ACTION);
+        USER_PERMISSION.add(UpdateRatingRequest.ACTION);
         USER_PERMISSION.add("");
     }    
     

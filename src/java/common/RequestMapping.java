@@ -109,4 +109,10 @@ public class RequestMapping {
         private CancelOrderRequest() {
         }
     }
+    
+    public static class UpdateRatingRequest {
+        public static final String ACTION = "updateRating";
+        private UpdateRatingRequest() {
+        }
+    }
 }
