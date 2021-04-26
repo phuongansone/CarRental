@@ -93,6 +93,11 @@ public class OrderService {
         return order;
     }
     
+    public boolean inactivateOrder(int orderId) 
+            throws SQLException, ClassNotFoundException {
+        return orderDAO.updateOrderStatus(orderId, Boolean.FALSE);
+    }
+    
     private OrderDTO mapRequestToOrderDTO(HttpServletRequest request) {
         OrderDTO order = new OrderDTO();
         

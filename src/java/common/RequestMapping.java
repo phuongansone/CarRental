@@ -98,8 +98,15 @@ public class RequestMapping {
     
     public static class OrderRequest {
         public static final String ACTION = "order";
+        public static final String SERVLET = "OrderServlet";
         public static final String VIEW = "/WEB-INF/pages/order.jsp";
         private OrderRequest() {
+        }
+    }
+    
+    public static class CancelOrderRequest {
+        public static final String ACTION = "cancelOrder";
+        private CancelOrderRequest() {
         }
     }
 }

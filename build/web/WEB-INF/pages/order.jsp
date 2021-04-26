@@ -21,6 +21,12 @@
                     <p class="card-text">Address: ${order.address}</p>
                     <p class="card-text">Phone: ${order.phone}</p>
                     <p class="card-text">Discount: <fmt:formatNumber type="percent" value="${order.discount.discount}" /></p>
+                    <c:if test="${order.status == true}">
+                        <p class="text-primary card-text">In progress</p>
+                    </c:if>
+                    <c:if test="${order.status == false}">
+                        <p class="text-danger card-text">Cancelled</p>
+                    </c:if>
                     <p class="text-muted">Date: ${order.createDate}</p>
                     <h5>Price: <fmt:formatNumber type="number" value="${order.price}" /> VNĐ</h5>
                 </div>
@@ -52,6 +58,13 @@
                     </div>
                 </div>
             </c:forEach>
+            <c:if test="${order.status == true}">
+                <form action="cancelOrder" method="POST" 
+                      onsubmit="return confirm('Do you want to cancel the order?')">
+                    <input type="hidden" name="id" value="${order.id}" />
+                    <input type="submit" value="Cancel" class="btn btn-danger" />
+                </form>
+            </c:if>
         </div>
     </body>
     <script src="resources/js/jquery-3.6.0.min.js"></script>

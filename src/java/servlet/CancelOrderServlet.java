@@ -1,9 +1,8 @@
 package servlet;
 
-import common.CommonAttribute;
+import static common.CommonAttribute.ERROR;
 import common.RequestMapping.OrderRequest;
 import common.RequestParam.OrderParam;
-import dto.OrderDTO;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.logging.Level;
@@ -12,6 +11,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import service.OrderService;
 import util.StringUtil;
 
@@ -19,7 +19,7 @@ import util.StringUtil;
  *
  * @author PC
  */
-public class OrderServlet extends HttpServlet {
+public class CancelOrderServlet extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -33,20 +33,6 @@ public class OrderServlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        
-        int orderId = StringUtil.parseInt(request.getParameter(OrderParam.ID), -1);
-        
-        OrderService orderService = new OrderService();
-        OrderDTO order = null;
-        
-        try {
-            order = orderService.getOrderById(orderId);
-        } catch (SQLException | ClassNotFoundException ex) {
-            Logger.getLogger(OrderServlet.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
-        request.setAttribute(CommonAttribute.ORDER, order);
-        request.getRequestDispatcher(OrderRequest.VIEW).forward(request, response);
     }
 
     /**
@@ -75,6 +61,20 @@ public class OrderServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         processRequest(request, response);
+        
+        HttpSession session = request.getSession();
+        int orderId = StringUtil.parseInt(request.getParameter(OrderParam.ID), -1);
+        
+        OrderService orderService = new OrderService();
+        
+        try {
+            orderService.inactivateOrder(orderId);
+        } catch (SQLException | ClassNotFoundException ex) {
+            Logger.getLogger(CancelOrderServlet.class.getName()).log(Level.SEVERE, null, ex);
+            session.setAttribute(ERROR, Boolean.TRUE);
+        }
+        
+        request.getRequestDispatcher(OrderRequest.SERVLET).forward(request, response);
     }
 
     /**

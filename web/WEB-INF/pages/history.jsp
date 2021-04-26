@@ -47,6 +47,14 @@
                         <p class="card-text">Receiver: ${order.fullname}</p>
                         <p class="card-text">Address: ${order.address}</p>
                         <p class="card-text">Phone: ${order.phone}</p>
+                        <p class="card-text">Rental date: ${order.rentalDate}</p>
+                        <p class="card-text">Return date: ${order.returnDate}</p>
+                        <c:if test="${order.status == true}">
+                            <p class="text-success card-text">In progress</p>
+                        </c:if>
+                        <c:if test="${order.status == false}">
+                            <p class="text-danger card-text">Cancelled</p>
+                        </c:if>
                         <p class="text-muted">Date: ${order.createDate}</p>
                         <h5>Price: <fmt:formatNumber type="number" value="${order.price}" /> VNĐ</h5>
                     </div>

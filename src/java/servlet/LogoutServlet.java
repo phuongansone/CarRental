@@ -1,25 +1,20 @@
 package servlet;
 
 import common.CommonAttribute;
-import common.RequestMapping.OrderRequest;
-import common.RequestParam.OrderParam;
-import dto.OrderDTO;
+import common.RequestMapping.LoginRequest;
+import dto.UserDTO;
 import java.io.IOException;
-import java.sql.SQLException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import service.OrderService;
-import util.StringUtil;
+import javax.servlet.http.HttpSession;
 
 /**
  *
  * @author PC
  */
-public class OrderServlet extends HttpServlet {
+public class LogoutServlet extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -33,20 +28,14 @@ public class OrderServlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
+        HttpSession session = request.getSession();
+        UserDTO user = (UserDTO) session.getAttribute(CommonAttribute.USER);
         
-        int orderId = StringUtil.parseInt(request.getParameter(OrderParam.ID), -1);
-        
-        OrderService orderService = new OrderService();
-        OrderDTO order = null;
-        
-        try {
-            order = orderService.getOrderById(orderId);
-        } catch (SQLException | ClassNotFoundException ex) {
-            Logger.getLogger(OrderServlet.class.getName()).log(Level.SEVERE, null, ex);
+        if (user != null) {
+            session.invalidate();
         }
         
-        request.setAttribute(CommonAttribute.ORDER, order);
-        request.getRequestDispatcher(OrderRequest.VIEW).forward(request, response);
+        request.getRequestDispatcher(LoginRequest.SERVLET).forward(request, response);
     }
 
     /**
@@ -86,5 +75,4 @@ public class OrderServlet extends HttpServlet {
     public String getServletInfo() {
         return "Short description";
     }
-
 }

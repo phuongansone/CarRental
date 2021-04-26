@@ -18,6 +18,7 @@ public class OrderDTO implements Serializable {
     private Date returnDate;
     private int price;
     private Date createDate;
+    private boolean status;
     private DiscountDTO discount;
     private List<OrderDetailDTO> orderDetails;
             
@@ -128,6 +129,14 @@ public class OrderDTO implements Serializable {
 
     public void setOrderDetails(List<OrderDetailDTO> orderDetails) {
         this.orderDetails = orderDetails;
+    }
+
+    public boolean isStatus() {
+        return status;
+    }
+
+    public void setStatus(boolean status) {
+        this.status = status;
     }
     
 }

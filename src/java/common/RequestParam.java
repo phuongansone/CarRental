@@ -74,6 +74,7 @@ public class RequestParam {
         public static final String RETURN_DATE = "return_date";
         public static final String DISCOUNT_ID = "discount_id";
         public static final String DISCOUNT = "discount";
+        public static final String STATUS = "status";
         public static final String PRICE = "price";
         public static final String CREATE_DATE = "create_date";
     }

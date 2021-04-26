@@ -27,7 +27,7 @@ public class OrderDAO {
     
     private static final String GET_ORDERS_BY_EMAIL = "SELECT o.id, email, fullname, address, phone, "
             + "rental_date, return_date, price, "
-            + "discount_id, d.discount, create_date "
+            + "discount_id, d.discount, create_date, o.status "
             + "FROM car_rental.order o "
             + "LEFT JOIN discount d "
             + "ON o.discount_id = d.id "
@@ -36,7 +36,7 @@ public class OrderDAO {
     
     private static final String GET_ORDERS_BY_EMAIL_NAME = "SELECT o.id, email, fullname, address, phone, "
             + "rental_date, return_date, price, "
-            + "discount_id, d.discount, create_date "
+            + "discount_id, d.discount, create_date, o.status "
             + "FROM car_rental.order o "
             + "LEFT JOIN discount d "
             + "ON o.discount_id = d.id "
@@ -45,7 +45,7 @@ public class OrderDAO {
     
     private static final String GET_ORDERS_BY_DATE = "SELECT o.id, email, fullname, address, phone, "
             + "rental_date, return_date, price, "
-            + "discount_id, d.discount, create_date "
+            + "discount_id, d.discount, create_date, o.status "
             + "FROM car_rental.order o "
             + "LEFT JOIN discount d "
             + "ON o.discount_id = d.id "
@@ -55,11 +55,14 @@ public class OrderDAO {
     
     private static final String GET_ORDER_BY_ID = "SELECT o.id, email, fullname, address, phone, "
             + "rental_date, return_date, price, "
-            + "discount_id, d.discount, create_date "
+            + "discount_id, d.discount, create_date, o.status "
             + "FROM car_rental.order o "
             + "LEFT JOIN discount d "
             + "ON o.discount_id = d.id "
             + "WHERE o.id = ?";
+    
+    private static final String UPDATE_ORDER_STATUS = "UPDATE car_rental.order "
+            + "SET status = ? WHERE id = ?";
     
     public int insertWithDiscount(OrderDTO order) 
             throws ClassNotFoundException, SQLException {
@@ -245,6 +248,31 @@ public class OrderDAO {
         return order;
     }
     
+    public boolean updateOrderStatus(int orderId, boolean status) 
+            throws SQLException, ClassNotFoundException {
+        Connection conn = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        
+        boolean updated = false;
+        
+        try {
+            conn = DatabaseUtil.makeConnection();
+            
+            if (conn != null) {
+                ps = conn.prepareStatement(UPDATE_ORDER_STATUS);
+                ps.setBoolean(1, status);
+                ps.setInt(2, orderId);
+                
+                updated = ps.executeUpdate() > 0;
+            }
+        } finally {
+            DatabaseUtil.closeConnection(conn, ps, rs);
+        }
+        
+        return updated;
+    }
+    
     private OrderDTO mapResultSetToOrderDTO(ResultSet rs) throws SQLException {
         OrderDTO order = new OrderDTO();
         
@@ -257,6 +285,7 @@ public class OrderDAO {
         order.setReturnDate(rs.getDate(OrderParam.RETURN_DATE));
         order.setPrice(rs.getInt(OrderParam.PRICE));
         order.setCreateDate(rs.getDate(OrderParam.CREATE_DATE));
+        order.setStatus(rs.getBoolean(OrderParam.STATUS));
         
         DiscountDTO discount = new DiscountDTO();
         discount.setId(rs.getInt(OrderParam.DISCOUNT_ID));
